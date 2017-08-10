@@ -271,7 +271,20 @@
             
         </li>
     
-        <li class="chapter " data-level="1.15" data-path="GLOSSARY.html">
+        <li class="chapter " data-level="1.15" data-path="GetInvolved.html">
+            
+                <a href="GetInvolved.html">
+            
+                    
+                    Get involved
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.16" data-path="GLOSSARY.html">
             
                 <a href="GLOSSARY.html">
             
@@ -334,7 +347,7 @@
 and means to retrieve them.  </p>
 <h1 id="defining-and-discovering-model">Defining and discovering model</h1>
 <h1 id="processconfigcreator---entry-point-of-model">ProcessConfigCreator - entry point of model</h1>
-<p>pl.touk.esp.engine.api.process.ProcessConfigCreator</p>
+<p>pl.touk.nussknacker.engine.api.process.ProcessConfigCreator</p>
 <pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">ProcessConfigCreator</span> </span>{
 
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">customStreamTransformers</span></span>(config: <span class="hljs-type">Config</span>): <span class="hljs-type">Map</span>[<span class="hljs-type">String</span>, <span class="hljs-type">WithCategories</span>[<span class="hljs-type">CustomStreamTransformer</span>]]
@@ -434,8 +447,26 @@ Here&apos;s an example:</p>
 <p><code>SendMailProcessor</code> uses <code>ServiceInvocationCollector</code> which is enabled in test mode. 
 Collected value can be seen in UI in mocked service after tests, so for example you can use <code>collector.collect()</code> 
 to collect HTTP request that you would normally send in production.</p>
-<h3 id="defining-parameters">Defining parameters</h3>
 <h3 id="lazy-values-use-with-caution">Lazy values (use with caution)</h3>
+<p>Instead of using <code>Enricher</code> node in graph to enrich data, one can use some syntactic sugar to enrich data in more object-oriented way -it is possible to inject enricher into model class. </p>
+<p>Here&apos;s an example.</p>
+<p>So let&apos;s say we defined <code>ClientService</code> as in above, and then we passed it into <code>ProcessConfigCreator</code>:</p>
+<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyProcessConfigCreator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ProcessConfigCreator</span> </span>{
+    ...
+    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">services</span></span>(config: <span class="hljs-type">Config</span>): <span class="hljs-type">Map</span>[<span class="hljs-type">String</span>, <span class="hljs-type">WithCategories</span>[<span class="hljs-type">Service</span>]] = {
+        <span class="hljs-type">Map</span>(<span class="hljs-string">&quot;clientService&quot;</span> -&gt; all(<span class="hljs-keyword">new</span> <span class="hljs-type">ClientService</span>))
+    }
+    ...
+}
+</code></pre>
+<p>To enrich model, which we assume is <code>Transaction</code> with <code>clientId</code> field, normally we would put <code>Enricher</code> in UI graph, but instead
+you can inject enricher:</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Transaction</span>(<span class="hljs-params">clientId: <span class="hljs-type">String</span></span>) <span class="hljs-keyword">extends</span> <span class="hljs-title">UsingLazyValues</span> </span>{
+  <span class="hljs-keyword">lazy</span> <span class="hljs-keyword">val</span> client = lazyValue[<span class="hljs-type">Client</span>](<span class="hljs-string">&quot;clientService&quot;</span>, <span class="hljs-string">&quot;clientId&quot;</span> -&gt; clientId)
+}
+</code></pre>
+<p>After that you&apos;ll able to access <code>client</code> in expression like this <code>#input.client</code> - so potential HTTP call is made behind a scenes, 
+but user cannot really distinguish it from usual field access. </p>
 <h2 id="exception-handlers">Exception handlers</h2>
 <h2 id="common-caveats">Common caveats</h2>
 <h1 id="advanced-subjects">Advanced subjects</h1>
@@ -487,7 +518,7 @@ to collect HTTP request that you would normally send in production.</p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"API","level":"1.8","depth":1,"next":{"title":"Flink integration","level":"1.9","depth":1,"path":"FlinkIntegration.md","ref":"FlinkIntegration.md","articles":[]},"previous":{"title":"Designing processes","level":"1.7","depth":1,"path":"DesigningProcesses.md","ref":"DesigningProcesses.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"API.md","mtime":"2017-08-06T21:44:35.203Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-08-07T07:05:54.058Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"API","level":"1.8","depth":1,"next":{"title":"Flink integration","level":"1.9","depth":1,"path":"FlinkIntegration.md","ref":"FlinkIntegration.md","articles":[]},"previous":{"title":"Designing processes","level":"1.7","depth":1,"path":"DesigningProcesses.md","ref":"DesigningProcesses.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"API.md","mtime":"2017-08-10T14:23:04.845Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-08-10T14:23:52.420Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
