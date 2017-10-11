@@ -7,7 +7,7 @@
         <title>Configuration · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.2">
+        <meta name="generator" content="GitBook 3.2.3">
         
         
         
@@ -348,7 +348,8 @@ The format of configuration is <a href="https://github.com/typesafehub/config" t
 <p>The configuration files defines</p>
 <ul>
 <li>settings of UI itself</li>
-<li>settings of various services used by model</li>
+<li>settings of various services used by <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
+includes data structures, and nodes definitions.  ">model</a></li>
 <li>means of communicating with Apache <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> cluster</li>
 </ul>
 <p>Sample configuration looks like this:</p>
@@ -380,7 +381,6 @@ flinkConfig {
 
   parallelism: 4
   jobManagerTimeout: 1m
-  processConfig: &quot;demo&quot;
   jarPath: &quot;./code-assembly.jar&quot;
 }
 
@@ -394,10 +394,9 @@ kibanaSettings {
   url: &quot;/kibana/&quot;
 }
 
-demo {
+processConfig {
   timeout: 10s
   checkpointInterval: 10m
-  processConfigCreatorClass: &quot;pl.touk.nussknacker.engine.example.ExampleProcessConfigCreator&quot;
   restartInterval: &quot;10s&quot;
   kafka = {
     zkAddress = &quot;zookeeper:2181&quot;
@@ -441,7 +440,8 @@ have processes detecting frauds and those implementing marketing campaigns. Cate
 <li>testSampleSize - default size of test data sample </li>
 </ul>
 <h2 id="flink-configuration">Flink configuration</h2>
-<p>Configuration of communication with <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> cluster and definition of model</p>
+<p>Configuration of communication with <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> cluster and definition of <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
+includes data structures, and nodes definitions.  ">model</a></p>
 <pre><code>flinkConfig {
   high-availability: &quot;zookeeper&quot;
   recovery.mode: &quot;zookeeper&quot;
@@ -459,24 +459,41 @@ have processes detecting frauds and those implementing marketing campaigns. Cate
 <p>In addition you can specify following values:</p>
 <ul>
 <li>jobManagerTimeout (e.g. 1m) - timeout used in communication with <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> cluster</li>
-<li>processConfig - name of config part that describes configuration of model (see below)</li>
-<li>jarPath - location of jar with model for processes</li>
+<li>processConfig - name of config part that describes configuration of <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
+includes data structures, and nodes definitions.  ">model</a> (see below)</li>
+<li>jarPath - location of jar with <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
+includes data structures, and nodes definitions.  ">model</a> for processes</li>
 </ul>
-<h2 id="model-configuration">Model configuration</h2>
-<p>Please remember that configuration of model has to be in block named as value of <code>flinkConfig.processConfig</code> key.</p>
-<p>Configuration of model has few common keys:</p>
+<h2 id="model">Process  </h2>
+<p>Configuration of processes has few common keys:</p>
 <ul>
 <li>timeout (e.g. 10s)- for synchronous services</li>
 <li>checkpointInterval - e.g. 10m</li>
-<li>processConfigCreatorClass - e.g. &quot;pl.touk.nussknacker.engine.example.ExampleProcessConfigCreator&quot;. This is FQN of class implementing
-<code>ProcessConfigCreator</code> interface.</li>
 </ul>
-<p>The rest of model configuration depends on your needs - all the properties defined here will be passed to <code>ProcessConfigCreator</code> as explained in <a href="API.html">API</a> documentation.</p>
+<p>The rest of <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
+includes data structures, and nodes definitions.  ">model</a> configuration depends on your needs - all the properties defined here will be passed to <code>ProcessConfigCreator</code> as explained in <a href="API.html">API</a> documentation.</p>
 <h3 id="configuration-of-services">Configuration of services</h3>
-<p>In model configuration you can also define some attributes of services. These include:</p>
+<p>In <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
+includes data structures, and nodes definitions.  ">model</a> configuration you can also define some attributes of services. These include:</p>
 <ul>
 <li>default values of fields</li>
 <li>icons</li>
+</ul>
+<pre><code>  nodes {
+    containsDefaultValue {
+      defaultValues {
+        parameterName = &quot;parameterValue&quot;
+      }
+    },
+    hasSpecialIcon {
+      icon: &quot;icon_file.svg&quot;
+    }
+  }
+</code></pre><ul>
+<li>containsDefaultValue, hasSpecialIcon - nodes names</li>
+<li>parameterName - node parameter name you&apos;d like to assign default value</li>
+<li>parameterValue - value of default parameter</li>
+<li>icon- path to icon file </li>
 </ul>
 
                                 
@@ -521,7 +538,7 @@ have processes detecting frauds and those implementing marketing campaigns. Cate
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Configuration","level":"1.11","depth":1,"next":{"title":"Roadmap","level":"1.12","depth":1,"path":"Roadmap.md","ref":"Roadmap.md","articles":[]},"previous":{"title":"Monitoring","level":"1.10","depth":1,"path":"Metrics.md","ref":"Metrics.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Configuration.md","mtime":"2017-08-25T06:16:18.205Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-09-06T13:02:36.151Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Configuration","level":"1.11","depth":1,"next":{"title":"Roadmap","level":"1.12","depth":1,"path":"Roadmap.md","ref":"Roadmap.md","articles":[]},"previous":{"title":"Monitoring","level":"1.10","depth":1,"path":"Metrics.md","ref":"Metrics.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Configuration.md","mtime":"2017-10-11T15:59:13.161Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-10-11T16:06:19.577Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

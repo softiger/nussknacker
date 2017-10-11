@@ -7,7 +7,7 @@
         <title>API · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.2">
+        <meta name="generator" content="GitBook 3.2.3">
         
         
         
@@ -343,11 +343,19 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="intro">Intro</h1>
-<p>Before designing your own processes first you have to define model of your data 
+<p>Before designing your own processes first you have to define <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
+includes data structures, and nodes definitions.  ">model</a> of your data 
 and means to retrieve them.  </p>
 <h1 id="defining-and-discovering-model">Defining and discovering model</h1>
+<p>All classes of your <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
+includes data structures, and nodes definitions.  ">model</a> should be packed in jar including implementation of &apos;ProcessConfigCreator&apos;.
+This trait defines nodes which can be used to build <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> jobs. 
+Nodes operates on data structures, which you also have to provide in <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
+includes data structures, and nodes definitions.  ">model</a>. </p>
 <h1 id="processconfigcreator---entry-point-of-model">ProcessConfigCreator - entry point of model</h1>
-<p>pl.touk.nussknacker.engine.api.process.ProcessConfigCreator</p>
+<p>Nussknacker accesses your <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
+includes data structures, and nodes definitions.  ">model</a> by implementation of
+<code>pl.touk.nussknacker.engine.api.process.ProcessConfigCreator</code></p>
 <pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">ProcessConfigCreator</span> </span>{
 
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">customStreamTransformers</span></span>(config: <span class="hljs-type">Config</span>): <span class="hljs-type">Map</span>[<span class="hljs-type">String</span>, <span class="hljs-type">WithCategories</span>[<span class="hljs-type">CustomStreamTransformer</span>]]
@@ -371,8 +379,16 @@ and means to retrieve them.  </p>
 }
 </code></pre>
 <h2 id="passing-processconfigcreator-to-nussknacker">Passing ProcessConfigCreator to Nussknacker</h2>
+<p><code>ProcessConfigCreator</code> implementation is provided by 
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html" target="_blank">ServiceLoader</a>.
+To register implementation, add file <code>META-INF/services/pl.touk.nussknacker.engine.api.process.ProcessConfigCreator</code>
+containing FQN of class implementing<code>ProcessConfigCreator</code> interface.
+Exactly one implementation have to be provided. 
+Any other case will result throws exception.</p>
 <h2 id="categories">Categories</h2>
-<h1 id="basic-blocks">Basic blocks</h1>
+<p>Each process is assigned to exactly one category. Each node can be accessible in many categories? 
+Category defines if node is accessible in process. </p>
+<p>TODO: some code example.</p>
 <h2 id="creating-sources-and-sinks">Creating sources and sinks</h2>
 <h2 id="source">Source</h2>
 <p>To create source one needs to extend <code>pl.touk.nussknacker.engine.api.process.SourceFactory</code> interface and annotate one method with
@@ -415,7 +431,7 @@ So to be classified as <code>Processor</code> annotated method has to return <co
 <pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ClientService</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Service</span> </span>{
   <span class="hljs-meta">@MethodToInvoke</span>
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">invoke</span></span>(<span class="hljs-meta">@ParamName</span>(<span class="hljs-string">&quot;clientId&quot;</span>) clientId: <span class="hljs-type">String</span>)
-            (<span class="hljs-keyword">implicit</span> ec: <span class="hljs-type">ExecutionContext</span>): <span class="hljs-type">Future</span>[<span class="hljs-type">Client</span>] = {
+            (<span class="hljs-keyword">implicit</span> ec: <span class="hljs-type">ExecutionContext</span>, metaData: <span class="hljs-type">MetaData</span>): <span class="hljs-type">Future</span>[<span class="hljs-type">Client</span>] = {
     <span class="hljs-keyword">val</span> clients = <span class="hljs-type">Map</span>(
       <span class="hljs-string">&quot;1&quot;</span> -&gt; <span class="hljs-type">Client</span>(<span class="hljs-string">&quot;1&quot;</span>, <span class="hljs-string">&quot;Alice&quot;</span>, <span class="hljs-string">&quot;123&quot;</span>), 
       <span class="hljs-string">&quot;2&quot;</span> -&gt; <span class="hljs-type">Client</span>(<span class="hljs-string">&quot;1&quot;</span>, <span class="hljs-string">&quot;Bob&quot;</span>, <span class="hljs-string">&quot;234&quot;</span>) 
@@ -426,6 +442,14 @@ So to be classified as <code>Processor</code> annotated method has to return <co
 </code></pre>
 <p>Every non-implicit parameter should be annotated with <code>@ParamName</code> - value from annotation will be used in UI to display parameter name.
 You have full control over non-implicit parameters, on the other hand implicit parameters are injected by Nussknacker.</p>
+<p>Apart from parameters - non-implicit and annotated with <code>@ParamName</code> you can also have certain implicit parameters in 
+signature of <code>@MethodToInvoke</code>. They are optional - you can put any of them in method signature, but you don&apos;t have to.
+They are:</p>
+<ul>
+<li><code>scala.concurrent.ExecutionContext</code> - useful for e.g. invoking asynchronous external services</li>
+<li><code>pl.touk.nussknacker.engine.api.MetaData</code> - if you want to e.g. have process name passed to external services</li>
+<li><code>pl.touk.nussknacker.engine.api.test.ServiceInvocationCollector</code> - used in test mode, see next paragraph</li>
+</ul>
 <h3 id="service-in-tests-from-file">Service in tests from file</h3>
 <p>Service in tests can behave as in production, but sometimes it seems wrong or impractical - for example when service sends mail. 
 So Nussknacker gives you control to decide how your service behaves during tests from file.
@@ -448,7 +472,8 @@ Here&apos;s an example:</p>
 Collected value can be seen in UI in mocked service after tests, so for example you can use <code>collector.collect()</code> 
 to collect HTTP request that you would normally send in production.</p>
 <h3 id="lazy-values-use-with-caution">Lazy values (use with caution)</h3>
-<p>Instead of using <code>Enricher</code> node in graph to enrich data, one can use some syntactic sugar to enrich data in more object-oriented way -it is possible to inject enricher into model class. </p>
+<p>Instead of using <code>Enricher</code> node in graph to enrich data, one can use some syntactic sugar to enrich data in more object-oriented way -it is possible to inject enricher into <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
+includes data structures, and nodes definitions.  ">model</a> class. </p>
 <p>Here&apos;s an example.</p>
 <p>So let&apos;s say we defined <code>ClientService</code> as in above, and then we passed it into <code>ProcessConfigCreator</code>:</p>
 <pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyProcessConfigCreator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ProcessConfigCreator</span> </span>{
@@ -459,7 +484,8 @@ to collect HTTP request that you would normally send in production.</p>
     ...
 }
 </code></pre>
-<p>To enrich model, which we assume is <code>Transaction</code> with <code>clientId</code> field, normally we would put <code>Enricher</code> in UI graph, but instead
+<p>To enrich <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
+includes data structures, and nodes definitions.  ">model</a>, which we assume is <code>Transaction</code> with <code>clientId</code> field, normally we would put <code>Enricher</code> in UI graph, but instead
 you can inject enricher:</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Transaction</span>(<span class="hljs-params">clientId: <span class="hljs-type">String</span></span>) <span class="hljs-keyword">extends</span> <span class="hljs-title">UsingLazyValues</span> </span>{
   <span class="hljs-keyword">lazy</span> <span class="hljs-keyword">val</span> client = lazyValue[<span class="hljs-type">Client</span>](<span class="hljs-string">&quot;clientService&quot;</span>, <span class="hljs-string">&quot;clientId&quot;</span> -&gt; clientId)
@@ -518,7 +544,7 @@ but user cannot really distinguish it from usual field access. </p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"API","level":"1.8","depth":1,"next":{"title":"Flink integration","level":"1.9","depth":1,"path":"FlinkIntegration.md","ref":"FlinkIntegration.md","articles":[]},"previous":{"title":"Designing processes","level":"1.7","depth":1,"path":"DesigningProcesses.md","ref":"DesigningProcesses.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"API.md","mtime":"2017-08-25T06:16:18.205Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-09-06T13:02:36.151Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"API","level":"1.8","depth":1,"next":{"title":"Flink integration","level":"1.9","depth":1,"path":"FlinkIntegration.md","ref":"FlinkIntegration.md","articles":[]},"previous":{"title":"Designing processes","level":"1.7","depth":1,"path":"DesigningProcesses.md","ref":"DesigningProcesses.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"API.md","mtime":"2017-10-11T15:59:13.161Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-10-11T16:06:19.577Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
