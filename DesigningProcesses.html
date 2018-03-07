@@ -378,10 +378,18 @@ Description is just comment for node.</p>
 Input if exists has to have exactly one assigned flow from another node.
 Output could have multiple flows, or none, or could have at least one obligatory.</p>
 <h2 id="filter">Filter</h2>
+<p>Filter passes records which satisfies its condition.
+It can have one or two outputs.
+First output is for records satisfying the condition, second (optional) is for others.
+<img src="img/filter_graph.png" alt="filter graph">
+Records from <code>source</code> which meets condition go to <code>true sink</code>, and others go to <code>false sink</code>. </p>
+<p><img src="img/filter_graph_single.png" alt="filter graph single"></p>
+<p>Records from <code>source</code> which meets condition go to <code>blue sink</code>, and others are filtered out. </p>
 <h3 id="parameters">Parameters</h3>
-<p>There are two parameters: <code>Expression</code>, and <code>Disabled</code>.</p>
+<p><img src="img/filter_window.png" alt="filter window">
+There are two parameters: <code>Expression</code>, and <code>Disabled</code>.</p>
 <p>Expression is written in SpEL. Should be evaluated to logical value. 
-Outgoing data flow depends if result expression is true or false.</p>
+Outgoing data flow depends on expression result.</p>
 <p>Disabled has logical value. 
 If is checked, expression is&apos;t evaluated, and returns value <code>true</code>.         </p>
 <h3 id="flow">Flow</h3>
@@ -392,6 +400,47 @@ Otherwise record is gone.</p>
 <p>If there are two outputs, one pipe is named <code>true</code> and another <code>false</code>.
 Each record which expression evaluates to <code>true</code> goes to <code>true</code> pipe,
 and other record goes to <code>false</code> pipe.  </p>
+<h2 id="split">Split</h2>
+<p>It doesn&apos;t have additional parameters.
+Each output receives all records and processes them independently. 
+<img src="img/split_graph.png" alt="split graph"></p>
+<p>Every record from <code>surce</code> go to <code>sink 1</code> and <code>sink 2</code>.
+<img src="img/split_window.png" alt="filter window"></p>
+<h3 id="flow">Flow</h3>
+<p>Have at least one output.
+Each output has same record as input, so all aotputs are identical.</p>
+<h2 id="switch">Switch</h2>
+<p>Distributes incoming data between outputs. 
+<img src="img/switch_graph.png" alt="split graph">
+Each record form <code>source</code> is tested against condition defined on edge. 
+If <code>color</code> is <code>blue</code> record goes to <code>blue sink</code>. 
+If <code>color</code> is <code>green</code> record goes to <code>green sink</code>. 
+For every other value record goes to <code>sink for others</code>.</p>
+<h3 id="parameters">Parameters</h3>
+<p><img src="img/switch_window.png" alt="split graph"></p>
+<p>There are two important parameters <code>Expression</code> and <code>exprVal</code>.
+<code>Expression</code> contains expression which is evaluated for each record,
+ and expression value is assigned to variable named like <code>exprVal</code> value.</p>
+<p> In <code>Switch</code> node edges can be of one of two types.</p>
+<p><img src="img/switch_edge_condition.png" alt="split graph"></p>
+<p> Edge of <code>Type</code> <code>Condition</code> has <code>Expression</code>. 
+ Record go to first output which condition it matches.</p>
+<p><img src="img/switch_edge_default.png" alt="split graph"></p>
+<p> There can be at most one edge of <code>Type</code> <code>Default</code>,
+  and it gets all records that doesn&apos;t match to any <code>Condition</code> edge. </p>
+<h3 id="flow">Flow</h3>
+<p>For each record from input switch <code>Expression</code> is evaluated and result is assigned to <code>exprVal</code> variable.
+After that records are tested against condition <code>Expressions</code> from output edges one by one.
+Record goes to first output which condition it satisfies.
+If record doesn&apos;t match any conditional output, and default output exists, record goes to default output.
+Otherwise mismatching record is filtered out.</p>
+<h2 id="variable">Variable</h2>
+<p>Evaluates <code>Expression</code>, and assigns to <code>Variable Name.</code></p>
+<p><img src="img/variable_graph.png" alt="split graph"></p>
+<p>Doesn&apos;t change records flow. 
+Have to have exactly one output.
+Variable once defined cannot be overwritten.  </p>
+<p><img src="img/variable_window.png" alt="split graph"></p>
 <h3 id="subprocesses">Subprocesses</h3>
 <p>TBD</p>
 <h3 id="using-custom-transformers">Using custom transformers</h3>
@@ -439,7 +488,7 @@ and other record goes to <code>false</code> pipe.  </p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Designing processes","level":"1.7","depth":1,"next":{"title":"API","level":"1.8","depth":1,"path":"API.md","ref":"API.md","articles":[]},"previous":{"title":"UI","level":"1.6","depth":1,"path":"UI.md","ref":"UI.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"DesigningProcesses.md","mtime":"2018-03-07T14:07:38.549Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-07T14:16:22.010Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Designing processes","level":"1.7","depth":1,"next":{"title":"API","level":"1.8","depth":1,"path":"API.md","ref":"API.md","articles":[]},"previous":{"title":"UI","level":"1.6","depth":1,"path":"UI.md","ref":"UI.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"DesigningProcesses.md","mtime":"2018-03-07T21:52:13.825Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-07T22:00:50.399Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
