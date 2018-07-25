@@ -389,14 +389,19 @@ flinkConfig {
   jarPath: &quot;./code-assembly.jar&quot;
 }
 
-grafanaSettings {
-  url: &quot;/grafana/&quot;
-  dashboard: &quot;flink-esp&quot;
-  env: &quot;demo&quot;
+metricsSettings {
+  url: &quot;http://localhost:3000/dashboard/db/$dashboard?theme=dark&amp;var-processName=$process&amp;var-env=demo&quot;
+  defaultDashboard: &quot;flink-esp&quot;
+  processingTypeToDashboard: {
+    &quot;request-response&quot;: &quot;standalone&quot;,
+    &quot;streaming&quot;: &quot;flink-esp&quot;
+  }
 }
 
-kibanaSettings {
-  url: &quot;/kibana/&quot;
+countsSettings {
+  influxUrl: &quot;http://localhost:3000/api/datasources/proxy/1/query&quot;
+  user: &quot;admin&quot;
+  password: &quot;admin&quot;
 }
 
 processConfig {
@@ -425,10 +430,13 @@ have processes detecting frauds and those implementing marketing campaigns. Cate
   &quot;fraud&quot;: &quot;streaming&quot;,
 }
 </code></pre><h3 id="monitoring-config">Monitoring config</h3>
-<pre><code>grafanaSettings {
-  url: &quot;/grafana/&quot;
-  dashboard: &quot;flink-esp&quot;
-  env: &quot;demo&quot;
+<pre><code>metricsSettings {
+  url: &quot;http://localhost:3000/dashboard/db/$dashboard?theme=dark&amp;var-processName=$process&amp;var-env=demo&quot;
+  defaultDashboard: &quot;flink-esp&quot;
+  processingTypeToDashboard: {
+    &quot;request-response&quot;: &quot;standalone&quot;,
+    &quot;streaming&quot;: &quot;flink-esp&quot;
+  }
 }
 </code></pre><h3 id="akka-configuration">Akka configuration</h3>
 <p>In <code>akka</code> section you can configure actor system used by GUI, e.g:</p>
@@ -456,11 +464,6 @@ includes data structures, and nodes definitions.  ">model</a></p>
       parallelism: 4
   }
   configLocation: &quot;/opt/flink/conf&quot;  
-
-
-  jobManagerTimeout: 1m
-  processConfig: &quot;demo&quot;
-  jarPath: &quot;./code-assembly.jar&quot;
   classpath: [&quot;./code-assembly.jar&quot;, &quot;http://url.additional.code/link.jar&quot;]
 }
 </code></pre><p>In this section you can put all configuration values for <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> client, 
@@ -474,10 +477,6 @@ with <em>configLocation</em> property</li>
 <p>In addition you can specify following values:</p>
 <ul>
 <li>jobManagerTimeout (e.g. 1m) - timeout used in communication with <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> cluster</li>
-<li>processConfig - name of config part that describes configuration of <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
-includes data structures, and nodes definitions.  ">model</a> (see below)</li>
-<li>jarPath - location of jar with <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
-includes data structures, and nodes definitions.  ">model</a> for processes <em>Deprecated - please use classpath</em></li>
 <li>classpath - list of files/URLs with jars with <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
 includes data structures, and nodes definitions.  ">model</a> for processes </li>
 </ul>
@@ -555,7 +554,7 @@ includes data structures, and nodes definitions.  ">model</a> configuration you 
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Configuration","level":"1.11","depth":1,"next":{"title":"Roadmap","level":"1.12","depth":1,"path":"Roadmap.md","ref":"Roadmap.md","articles":[]},"previous":{"title":"Monitoring","level":"1.10","depth":1,"path":"Metrics.md","ref":"Metrics.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Configuration.md","mtime":"2018-07-24T07:13:15.969Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-07-24T07:22:06.275Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Configuration","level":"1.11","depth":1,"next":{"title":"Roadmap","level":"1.12","depth":1,"path":"Roadmap.md","ref":"Roadmap.md","articles":[]},"previous":{"title":"Monitoring","level":"1.10","depth":1,"path":"Metrics.md","ref":"Metrics.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Configuration.md","mtime":"2018-07-25T09:01:29.055Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-07-25T09:10:27.269Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
