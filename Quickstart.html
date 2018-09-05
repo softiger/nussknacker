@@ -347,11 +347,11 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="quickstart">Quickstart</h1>
-<h2 id="prequisites">Prequisites</h2>
+<h2 id="prerequisites">Prerequisites</h2>
 <p>To run this quickstart you have to </p>
 <ul>
 <li>have Docker (more or less latest version) installed</li>
-<li>have open certain ports (see docker-compose.yml)</li>
+<li>open certain ports (see docker-compose.yml)</li>
 </ul>
 <h2 id="running">Running</h2>
 <ul>
@@ -365,7 +365,7 @@
 <p>Now you are ready to check your newly created environment:</p>
 <ul>
 <li><a href="http://localhost:8081/" target="_blank">Nussknacker</a> - user/password: admin/admin</li>
-<li><a href="http://localhost:8081/flink/" target="_blank">Apache Flink ui</a></li>
+<li><a href="http://localhost:8081/flink/" target="_blank">Apache Flink UI</a></li>
 <li><a href="http://localhost:8081/grafana/" target="_blank">Grafana</a></li>
 <li><a href="http://localhost:8081/kibana/" target="_blank">Kibana</a></li>
 </ul>
@@ -389,7 +389,7 @@
 <h2 id="test-process-with-data">Test process with data</h2>
 <ul>
 <li>Click &apos;Deploy&apos; on right panel</li>
-<li>Verify on <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> GUI at <a href="http://localhost:8081/flink/" target="_blank">http://localhost:8081/flink/</a> that your process is running</li>
+<li>Verify on <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> UI at <a href="http://localhost:8081/flink/" target="_blank">http://localhost:8081/flink/</a> that your process is running</li>
 <li>Run ./testData/sendTestTransactions.sh script a few times to generate some data (first run may end with error from Kafka - don&apos;t worry about it). Script will send some json data to &quot;transactions&quot; Kafka topic. </li>
 <li>Go to Metrics tab on Nussknacker main panel - you should see changed metrics. Your process just processed data from Kafka and saved filtered results!</li>
 </ul>
@@ -517,7 +517,7 @@ using <code>./buildSampleAssembly.sh</code>.</p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Quickstart","level":"1.3","depth":1,"next":{"title":"Architecture","level":"1.4","depth":1,"path":"Architecture.md","ref":"Architecture.md","articles":[]},"previous":{"title":"What is Nussknacker and what it's good for","level":"1.2","depth":1,"path":"WhyNussknacker.md","ref":"WhyNussknacker.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Quickstart.md","mtime":"2018-08-30T11:48:13.122Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-08-30T11:57:50.355Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Quickstart","level":"1.3","depth":1,"next":{"title":"Architecture","level":"1.4","depth":1,"path":"Architecture.md","ref":"Architecture.md","articles":[]},"previous":{"title":"What is Nussknacker and what it's good for","level":"1.2","depth":1,"path":"WhyNussknacker.md","ref":"WhyNussknacker.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Quickstart.md","mtime":"2018-09-05T07:13:14.449Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-09-05T07:24:38.802Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
