@@ -2,8 +2,9 @@ package pl.touk.nussknacker.ui.api.helpers
 
 
 import akka.actor.ActorRef
-import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.model._
 import akka.http.scaladsl.testkit.ScalatestRouteTest
+import argonaut.{Json, PrettyParams}
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest._
@@ -19,6 +20,8 @@ import pl.touk.nussknacker.ui.sample.SampleProcess
 import pl.touk.nussknacker.ui.security.api.Permission
 import cats.syntax.semigroup._
 import cats.instances.all._
+import pl.touk.nussknacker.engine.management.FlinkModelData
+import pl.touk.nussknacker.ui.process.uiconfig.defaults.{DefaultValueExtractorChain, ParamDefaultValueConfig}
 
 trait EspItTest extends LazyLogging with WithDbTesting with TestPermissions { self: ScalatestRouteTest with Suite with BeforeAndAfterEach with Matchers =>
 
@@ -34,6 +37,8 @@ trait EspItTest extends LazyLogging with WithDbTesting with TestPermissions { se
   val processActivityRepository = newProcessActivityRepository(db)
 
   val typesForCategories = new ProcessTypesForCategories(ConfigFactory.load())
+
+  val existingProcessingType = ProcessingType.Streaming
 
   val processManager = new MockProcessManager
   def createManagementActorRef = ManagementActor(env,
@@ -53,6 +58,10 @@ trait EspItTest extends LazyLogging with WithDbTesting with TestPermissions { se
     processAuthorizer = processAuthorizer
   )
   val processesExportResources = new ProcessesExportResources(processRepository, processActivityRepository)
+  val definitionResources = new DefinitionResources(
+    Map(existingProcessingType ->  FlinkModelData(ConfigFactory.load())), subprocessRepository,
+    DefaultValueExtractorChain(ParamDefaultValueConfig(Map.empty)), Map.empty, Map.empty
+  )
 
   val processesRouteWithAllPermissions = withAllPermissions(processesRoute)
 
@@ -140,6 +149,19 @@ trait EspItTest extends LazyLogging with WithDbTesting with TestPermissions { se
 
   def getProcesses = {
     Get(s"/processes") ~> withPermissions(processesRoute, testPermissionRead)
+  }
+
+  def getProcessDefinitionData(processingType: ProcessingType.ProcessingType, subprocessVersions: Json) = {
+    Post(s"/processDefinitionData/$processingType?isSubprocess=false", toEntity(subprocessVersions)) ~> withPermissions(definitionResources, testPermissionRead)
+  }
+
+  def getProcessDefinitionServices() = {
+    Get("/processDefinitionData/services") ~> withPermissions(definitionResources, testPermissionRead)
+  }
+
+  private def toEntity(json: Json) = {
+    val jsonString = json.pretty(PrettyParams.spaces2.copy(dropNullKeys = true, preserveOrder = true))
+    HttpEntity(ContentTypes.`application/json`, jsonString)
   }
 
 }

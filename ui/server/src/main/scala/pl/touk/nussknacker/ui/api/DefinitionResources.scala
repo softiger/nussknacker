@@ -1,5 +1,7 @@
 package pl.touk.nussknacker.ui.api
 
+import akka.http.scaladsl.model._
+import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.{Directives, Route}
 import pl.touk.http.argonaut.Argonaut62Support
 import pl.touk.nussknacker.engine.ModelData
@@ -55,24 +57,29 @@ class DefinitionResources(modelData: Map[ProcessingType, ModelData],
         post {
           entity(as[Map[String, Long]]) { subprocessVersions =>
             complete {
-              val modelDataForType = modelData(processingType)
-              val chosenProcessDefinition = modelDataForType.processDefinition
-              val subprocessInputs = fetchSubprocessInputs(subprocessVersions, modelDataForType.modelClassLoader.classLoader)
-              val subprocessesDetails = subprocessRepository.loadSubprocesses(subprocessVersions)
-              val uiProcessDefinition = UIProcessDefinition(chosenProcessDefinition, subprocessInputs)
-              ProcessObjects(
-                nodesToAdd = definitionPreparer.prepareNodesToAdd(
-                  user = user,
-                  processDefinition = chosenProcessDefinition,
-                  isSubprocess = isSubprocess,
-                  subprocessInputs = subprocessInputs,
-                  extractorFactory = parameterDefaultValueExtractorStrategyFactory),
-                processDefinition = uiProcessDefinition,
-                edgesForNodes = definitionPreparer.prepareEdgeTypes(
-                  user = user,
-                  processDefinition = chosenProcessDefinition,
-                  isSubprocess = isSubprocess,
-                  subprocessesDetails = subprocessesDetails))
+              val response: HttpResponse = modelData.get(processingType).map { modelDataForType =>
+                val chosenProcessDefinition = modelDataForType.processDefinition
+                val subprocessInputs = fetchSubprocessInputs(subprocessVersions, modelDataForType.modelClassLoader.classLoader)
+                val subprocessesDetails = subprocessRepository.loadSubprocesses(subprocessVersions)
+                val uiProcessDefinition = UIProcessDefinition(chosenProcessDefinition, subprocessInputs)
+                val result = ProcessObjects(
+                  nodesToAdd = definitionPreparer.prepareNodesToAdd(
+                    user = user,
+                    processDefinition = chosenProcessDefinition,
+                    isSubprocess = isSubprocess,
+                    subprocessInputs = subprocessInputs,
+                    extractorFactory = parameterDefaultValueExtractorStrategyFactory),
+                  processDefinition = uiProcessDefinition,
+                  edgesForNodes = definitionPreparer.prepareEdgeTypes(
+                    user = user,
+                    processDefinition = chosenProcessDefinition,
+                    isSubprocess = isSubprocess,
+                    subprocessesDetails = subprocessesDetails))
+                HttpResponse(entity = HttpEntity(ContentTypes.`application/json`, result.asJson.toString()))
+              }.getOrElse {
+                HttpResponse(status = StatusCodes.NotFound, entity = s"Processing type: $processingType not found")
+              }
+              response
             }
           }
         }
@@ -82,6 +89,16 @@ class DefinitionResources(modelData: Map[ProcessingType, ModelData],
         complete {
           val subprocessIds = subprocessRepository.loadSubprocesses().map(_.canonical.metaData.id).toList
           ProcessObjectsFinder.componentIds(modelData.values.map(_.processDefinition).toList, subprocessIds)
+        }
+      }
+    } ~ path("processDefinitionData" / "services") {
+      get {
+        complete {
+          val result = modelData.map {
+            case (k, v) =>
+              k.toString -> v.processDefinition.services
+          }
+          HttpResponse(entity = HttpEntity(ContentTypes.`application/json`, result.asJson.toString()))
         }
       }
     }

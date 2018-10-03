@@ -20,6 +20,7 @@ import ArgonautShapeless._
 import pl.touk.nussknacker.engine.api.test.InvocationCollectors.QueryServiceResult
 import pl.touk.nussknacker.engine.api.typed.{ClazzRef, typing}
 import pl.touk.nussknacker.engine.api.typed.typing.TypingResult
+import pl.touk.nussknacker.engine.definition.DefinitionExtractor.ObjectDefinition
 import pl.touk.nussknacker.engine.graph.node.NodeData
 import pl.touk.nussknacker.engine.util.json.{BestEffortJsonEncoder, Codecs}
 import pl.touk.nussknacker.engine.util.service.query.ServiceQuery.QueryResult
@@ -101,6 +102,8 @@ trait UiCodecs extends Codecs with Argonauts with SingletonInstances with Derive
   implicit val typingResultDummyDecode : DecodeJson[TypingResult] = DecodeJson(_ => DecodeResult.ok(typing.Unknown))
 
   implicit def processObjectsEncodeEncode = EncodeJson.of[ProcessObjects]
+
+  implicit def objectDefinitionEncode = EncodeJson.of[ObjectDefinition]
 
   implicit def processHistory = EncodeJson.of[ProcessHistoryEntry]
 
