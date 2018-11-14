@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Introduction · GitBook</title>
+        <title>Security · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -61,8 +61,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="WhyNussknacker.html" />
+    <link rel="next" href="Roadmap.html" />
     
+    
+    <link rel="prev" href="Configuration.html" />
     
 
     </head>
@@ -91,7 +93,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -234,7 +236,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.12" data-path="Security.html">
+        <li class="chapter active" data-level="1.12" data-path="Security.html">
             
                 <a href="Security.html">
             
@@ -342,7 +344,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >Introduction</a>
+        <a href="." >Security</a>
     </h1>
 </div>
 
@@ -357,22 +359,50 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="nussknacker---streaming-processes-diagrams">Nussknacker - streaming processes diagrams</h1>
-<p><img src="img/nussknacker_small.jpg" alt="logo"></p>
-<p>Nussknacker lets you design, deploy and monitor streaming processes using easy to use GUI.
-We leverage power, performance and reliability of Apache <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> to make your processes fast and accurate.</p>
-<p>See:</p>
+                                <h1 id="security">Security</h1>
+<p>Nussnkacker has pluggable security architecture. You can either use default authentication provider, based
+on Basic authentication and static user configuration or integrate with other authentication mechanisms such as corporate SSO.</p>
+<h2 id="users-and-permissions">Users and permissions</h2>
+<p>Each user has id and set of permissions for every process category. There are following permissions:</p>
 <ul>
-<li><a href="Quickstart.html">Quickstart</a> to have a look around</li>
-<li><a href="WhyNussknacker.html">Why Nussknacker</a> to understand how Nussknacker can help you</li>
-<li><a href="Architecture.html">Architecture</a> to understand how Nussknacker works</li>
-<li><a href="PoweredBy.html">PoweredBy</a> to see where Nussknacker is used</li>
+<li>Read - user can view processes in category</li>
+<li>Write - user can modify/add new processes in category</li>
+<li>Deploy - user can deploy or cancel processes in given category</li>
 </ul>
-<h2 id="process-design">Process design</h2>
-<p><img src="img/screen1b.jpg" alt="Nussknacker in action"></p>
-<h2 id="process-monitoring">Process monitoring</h2>
-<p><img src="img/screen2a.jpg" alt="Nussknacker in action"></p>
-<p>Nussknacker is created by <a href="https://touk.pl" target="_blank">TouK</a>, hosted on <a href="https://github.com/touk/nussknacker" target="_blank">Github</a> and licensed under ASL 2.0.</p>
+<h2 id="default-security-module">Default security module</h2>
+<p>Default security provider uses users file in following format:</p>
+<pre><code>users: [
+  {
+    id: &quot;user1&quot;
+    password: &quot;pass&quot;
+    categoryPermissions: {
+      &quot;Category1&quot;: [&quot;Read&quot;, &quot;Deploy&quot;]
+      &quot;Category2&quot;: [&quot;Read&quot;, &quot;Write&quot;]
+    }
+  },
+  {
+    id: &quot;user2&quot;
+    encrypedPassword: &quot;$2a$12$oA3U7DXkT5eFkyB8GbtKzuVqxUCU0zDmcueBYV218zO/JFQ9/bzY6&quot;
+    categoryPermissions: {
+      &quot;Category1&quot;: [&quot;Read&quot;, &quot;Deploy&quot;]
+    }
+  }
+]
+</code></pre><p>You can store passwords as plaintext or (preferably) encrypted using bcrypt. To compute encrypted passiowrd you can use following python script:</p>
+<pre><code class="lang-python"><span class="hljs-keyword">import</span> bcrypt
+print(bcrypt.hashpw(<span class="hljs-string">&quot;password_to_encode&quot;</span>.encode(<span class="hljs-string">&quot;utf8&quot;</span>), bcrypt.gensalt(rounds = <span class="hljs-number">12</span>, prefix = <span class="hljs-string">&quot;2a&quot;</span>)))
+</code></pre>
+<h2 id="implementing-own-security-provider">Implementing own security provider</h2>
+<p>In order to implement authentication provider you have to implement trait: </p>
+<pre><code class="lang-java">trait AuthenticatorFactory {
+  <span class="hljs-function">def <span class="hljs-title">createAuthenticator</span><span class="hljs-params">(config: Config)</span>: AuthenticationDirective[LoggedUser]
+}
+</span></code></pre>
+<p>It is based on <code>AuthenticationDirective</code> of Akka Http. Implementation must be put on Nussknacker classpath (Note: <strong>not</strong> in jar with <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, 
+includes data structures, and nodes definitions.  ">model</a>)
+You must also register your implementation using Java&apos;s ServiceLoader mechanism - that is, you have to provide
+file <code>META-INF/services/pl.touk.nussknacker.ui.security.api.AuthenticatorFactory</code> containing fully qualified name of implementation of <code>AuthenticatorFactory</code>.
+Please note that there can be <strong>only</strong> one implementation on the classpath. </p>
 
                                 
                                 </section>
@@ -400,8 +430,12 @@ We leverage power, performance and reliability of Apache <a href="GLOSSARY.html#
 
             
                 
+                <a href="Configuration.html" class="navigation navigation-prev " aria-label="Previous page: Configuration">
+                    <i class="fa fa-angle-left"></i>
+                </a>
                 
-                <a href="WhyNussknacker.html" class="navigation navigation-next navigation-unique" aria-label="Next page: What is Nussknacker and what it's good for">
+                
+                <a href="Roadmap.html" class="navigation navigation-next " aria-label="Next page: Roadmap">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -412,7 +446,7 @@ We leverage power, performance and reliability of Apache <a href="GLOSSARY.html#
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"What is Nussknacker and what it's good for","level":"1.2","depth":1,"path":"WhyNussknacker.md","ref":"WhyNussknacker.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2018-11-14T15:23:12.896Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-11-14T15:31:53.406Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Security","level":"1.12","depth":1,"next":{"title":"Roadmap","level":"1.13","depth":1,"path":"Roadmap.md","ref":"Roadmap.md","articles":[]},"previous":{"title":"Configuration","level":"1.11","depth":1,"path":"Configuration.md","ref":"Configuration.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Security.md","mtime":"2018-11-14T15:23:12.896Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-11-14T15:31:53.406Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
