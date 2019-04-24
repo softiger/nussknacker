@@ -460,9 +460,15 @@ Each field value is evaluated by using <code>Expression</code>.  </p>
 <p><img src="img/variable_object_window.png" alt="split graph"></p>
 <p>Doesn&apos;t change records flow. MapVariable once defined cannot be overwritten.  </p>
 <h3 id="subprocesses">Subprocesses</h3>
-<p>TBD</p>
+<p>Subprocesses let you abstract common used parts of process.
+See <a href="Subprocesses.md">subprocesses</a> for more detailed description of how they work.</p>
 <h3 id="using-custom-transformers">Using custom transformers</h3>
-<p>TBD</p>
+<p>Sometimes basic building blocks are not enough - you may want to code custom aggregations or other
+statuful processing in <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a>. 
+See below for more detailed guide:</p>
+<ul>
+<li><a href="customTransformers/FlinkCustomTransformers.md">Flink transformers</a></li>
+</ul>
 
                                 
                                 </section>
@@ -506,7 +512,7 @@ Each field value is evaluated by using <code>Expression</code>.  </p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Designing processes","level":"1.7","depth":1,"next":{"title":"API","level":"1.8","depth":1,"path":"API.md","ref":"API.md","articles":[]},"previous":{"title":"UI","level":"1.6","depth":1,"path":"UI.md","ref":"UI.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"DesigningProcesses.md","mtime":"2019-04-24T05:26:15.216Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-04-24T05:36:21.540Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Designing processes","level":"1.7","depth":1,"next":{"title":"API","level":"1.8","depth":1,"path":"API.md","ref":"API.md","articles":[]},"previous":{"title":"UI","level":"1.6","depth":1,"path":"UI.md","ref":"UI.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"DesigningProcesses.md","mtime":"2019-04-24T06:20:14.020Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-04-24T06:30:31.942Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
