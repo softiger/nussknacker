@@ -4,7 +4,7 @@ import org.apache.flink.api.common.serialization.DeserializationSchema
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.streaming.api.functions.TimestampAssigner
 import org.apache.flink.streaming.api.functions.source.SourceFunction
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
 import org.apache.flink.streaming.util.serialization.{KeyedDeserializationSchema, KeyedDeserializationSchemaWrapper}
 import org.apache.kafka.clients.producer.ProducerRecord
 import pl.touk.nussknacker.engine.api.process.{Source, TestDataGenerator, TestDataParserProvider}
@@ -97,8 +97,8 @@ abstract class BaseKafkaSourceFactory[T: TypeInformation](config: KafkaConfig,
       createFlinkSource()
     }
 
-    protected def createFlinkSource(): FlinkKafkaConsumer011[T] = {
-      new FlinkKafkaConsumer011[T](topics.asJava, schema, KafkaEspUtils.toProperties(config, Some(consumerGroupId)))
+    protected def createFlinkSource(): FlinkKafkaConsumer[T] = {
+      new FlinkKafkaConsumer[T](topics.asJava, schema, KafkaEspUtils.toProperties(config, Some(consumerGroupId)))
     }
 
     override def generateTestData(size: Int): Array[Byte] = {

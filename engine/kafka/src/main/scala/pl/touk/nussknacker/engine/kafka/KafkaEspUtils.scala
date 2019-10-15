@@ -1,5 +1,6 @@
 package pl.touk.nussknacker.engine.kafka
 
+import java.time
 import java.util.concurrent.TimeUnit
 import java.util.{Collections, Properties}
 
@@ -49,7 +50,7 @@ object KafkaEspUtils extends LazyLogging {
     props.setProperty("bootstrap.servers", config.kafkaAddress)
     props.setProperty("auto.offset.reset", "earliest")
     groupId.foreach(props.setProperty("group.id", _))
-    config.kafkaProperties.map(_.asJava).foreach(props.putAll)
+    config.kafkaProperties.map(_.asJava: java.util.Map[_, _]).foreach(props.putAll)
     props
   }
 
@@ -89,7 +90,7 @@ object KafkaEspUtils extends LazyLogging {
           val offsetToSearch = Math.max(0, lastOffset - size)
           consumer.seek(tp, offsetToSearch)
           val result = new ArrayBuffer[ConsumerRecord[Array[Byte], Array[Byte]]](size)
-          result.appendAll(consumer.poll(100).records(tp).asScala)
+          result.appendAll(consumer.poll(time.Duration.ofSeconds(1)).records(tp).asScala)
           // result might be empty if we shift offset to far and there will be
           // no messages on the topic due to retention
           if(result.isEmpty){
@@ -100,7 +101,7 @@ object KafkaEspUtils extends LazyLogging {
           // So when trying to read 70 msgs from topic with only 50, we will return 50 immediately
           // instead of waiting for another 20 to be written to the topic.
           while(result.size < size && currentOffset < lastOffset) {
-            result.appendAll(consumer.poll(100).records(tp).asScala)
+            result.appendAll(consumer.poll(time.Duration.ofSeconds(1)).records(tp).asScala)
             currentOffset = consumer.position(tp)
           }
           consumer.unsubscribe()
