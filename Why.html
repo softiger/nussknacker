@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Monitoring · GitBook</title>
+        <title>Why Nussknacker · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -61,10 +61,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="Configuration.html" />
+    <link rel="next" href="Quickstart.html" />
     
     
-    <link rel="prev" href="FlinkIntegration.html" />
+    <link rel="prev" href="./" />
     
 
     </head>
@@ -106,7 +106,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2" data-path="Why.html">
+        <li class="chapter active" data-level="1.2" data-path="Why.html">
             
                 <a href="Why.html">
             
@@ -210,7 +210,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.10" data-path="Metrics.html">
+        <li class="chapter " data-level="1.10" data-path="Metrics.html">
             
                 <a href="Metrics.html">
             
@@ -357,7 +357,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >Monitoring</a>
+        <a href="." >Why Nussknacker</a>
     </h1>
 </div>
 
@@ -372,15 +372,27 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="monitoring">Monitoring</h1>
-<p>One of crucial aspects of running production streaming processes is monitoring. In this section we&apos;ll explain how Nussknacker process running of <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> cluster gives rise to certain metrics, and how to process them and display in Grafana.</p>
-<p>For each process following metrics are collected:</p>
+                                <h1 id="why-nussknacker">Why Nussknacker?</h1>
+<h2 id="make-power-of-apache-flink-accessible-to-business-users">Make power of Apache Flink accessible to business users</h2>
+<p>Real-time data processing quickly becomes one of the key ingredients of marketing, monitoring or fraud detection.
+The ability to ingest large amounts of data within (mili)seconds, to process them and draw actionable insights can become a real competitive advantage. </p>
+<p>One of the most advanced platforms for stream processing is Apache <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a>. It allows users to process millions of events per second and process them without losing even one. 
+<a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> offers the unmatched richness of Scala/Java API for performing filtering, enrichment and sophisticated aggregations. </p>
+<p>However, many use cases involve processes that would be best defined or changed by not-so-technical users - analysts or business people. Furthermore, many companies do not have large enough development teams to be able to define all processes with code. </p>
+<p>This is where Nussknacker kicks in.</p>
+<h2 id="flow">Flow</h2>
+<p>We strongly believe that &apos;zero-code&apos; platforms are humbug. For each deployment, some development effort is needed to define <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, includes data structures, and nodes definitions.  ">model</a>, integrations with external systems and so on. </p>
+<p>This step includes development and produces jar with <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, includes data structures, and nodes definitions.  ">model</a> and defined services. Read 
+<a href="API.html">API</a> section to learn how to define <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, includes data structures, and nodes definitions.  ">model</a> classes and provide integrations.</p>
+<p>Once those artifacts are defined and installed in Nussknacker, semi-technical users
+will be able to design specific processes using <a href="DesigningProcesses.html">GUI</a>. </p>
+<h2 id="applications">Applications</h2>
+<p>Real-time event processing is crucial in many area. Below are sample use cases:</p>
 <ul>
-<li>number of events consumed</li>
-<li>number of events that passed the whole process</li>
-<li>number of events filtered out</li>
-<li>http services&apos; invocation times, errors and throughput</li>
-<li>event processing delays</li>
+<li>Real-time marketing</li>
+<li>Fraud prevention and detection</li>
+<li>Streaming ETL</li>
+<li>Traffic data</li>
 </ul>
 
                                 
@@ -409,12 +421,12 @@
 
             
                 
-                <a href="FlinkIntegration.html" class="navigation navigation-prev " aria-label="Previous page: Flink integration">
+                <a href="./" class="navigation navigation-prev " aria-label="Previous page: Introduction">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="Configuration.html" class="navigation navigation-next " aria-label="Next page: Configuration">
+                <a href="Quickstart.html" class="navigation navigation-next " aria-label="Next page: Quickstart">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -425,7 +437,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Monitoring","level":"1.10","depth":1,"next":{"title":"Configuration","level":"1.11","depth":1,"path":"Configuration.md","ref":"Configuration.md","articles":[]},"previous":{"title":"Flink integration","level":"1.9","depth":1,"path":"FlinkIntegration.md","ref":"FlinkIntegration.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Metrics.md","mtime":"2019-10-21T12:59:00.575Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-10-21T13:12:44.631Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Why Nussknacker","level":"1.2","depth":1,"next":{"title":"Quickstart","level":"1.3","depth":1,"path":"Quickstart.md","ref":"Quickstart.md","articles":[]},"previous":{"title":"Introduction","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":["alerts"],"pluginsConfig":{"alerts":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Why.md","mtime":"2019-10-21T12:59:00.575Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-10-21T13:12:44.631Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
