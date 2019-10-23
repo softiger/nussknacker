@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Introduction · GitBook</title>
+        <title>Engines · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,8 +57,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="Why.html" />
+    <link rel="next" href="API.html" />
     
+    
+    <link rel="prev" href="Architecture.html" />
     
 
     </head>
@@ -87,7 +89,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -205,7 +207,7 @@
             
         </li>
     
-        <li class="chapter " data-level="3.2" data-path="Engines.html">
+        <li class="chapter active" data-level="3.2" data-path="Engines.html">
             
                 <a href="Engines.html">
             
@@ -359,7 +361,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >Introduction</a>
+        <a href="." >Engines</a>
     </h1>
 </div>
 
@@ -374,22 +376,11 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <p><img src="img/nussknacker_small.jpg" alt="logo"></p>
-<p>Nussknacker lets you design, deploy and monitor processes using GUI. You can run your processes on various engines. </p>
-<p>Nussknacker started as Apache <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> &quot;self-service&quot; process authoring tool. We still leverage the power, performance and reliability of Apache <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> to make your streaming processes fast and accurate. </p>
-<p>But you are not limited to <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a>. The request-response engine lets you create processes exposing REST API.</p>
-<p>See:</p>
-<ul>
-<li><a href="Quickstart.html">Quickstart</a> to have a look around</li>
-<li><a href="Why.html">Why Nussknacker</a> to understand how Nussknacker can help you</li>
-<li><a href="Architecture.html">Architecture</a> to understand how Nussknacker works</li>
-<li><a href="PoweredBy.html">PoweredBy</a> to see where Nussknacker is used</li>
-</ul>
-<h2 id="process-design">Process design</h2>
-<p><img src="img/screen1b.jpg" alt="Nussknacker in action"></p>
-<h2 id="process-monitoring">Process monitoring</h2>
-<p><img src="img/screen2a.jpg" alt="Nussknacker in action"></p>
-<p>Nussknacker is created by <a href="https://touk.pl" target="_blank">TouK</a>, hosted on <a href="https://github.com/touk/nussknacker" target="_blank">Github</a> and licensed under ASL 2.0.</p>
+                                <h1 id="points-of-integration-with-apache-flink">Points of integration with Apache Flink</h1>
+<p>Nussknacker can be seen as a GUI for creating Apache <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> jobs. In this section we show how different <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> concepts can be used (or how are they mapped) in Nussknacker.</p>
+<h2 id="handling-state">Handling state</h2>
+<h2 id="checkpoints-restarting">Checkpoints, restarting</h2>
+<h2 id="handling-time">Handling time</h2>
 
                                 
                                 </section>
@@ -417,8 +408,12 @@
 
             
                 
+                <a href="Architecture.html" class="navigation navigation-prev " aria-label="Previous page: Architecture">
+                    <i class="fa fa-angle-left"></i>
+                </a>
                 
-                <a href="Why.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Why Nussknacker">
+                
+                <a href="API.html" class="navigation navigation-next " aria-label="Next page: API">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -429,7 +424,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"Why Nussknacker","level":"1.2","depth":1,"path":"Why.md","ref":"Why.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2019-10-23T06:00:12.198Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-10-23T06:08:37.243Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Engines","level":"3.2","depth":1,"next":{"title":"API","level":"3.3","depth":1,"path":"API.md","ref":"API.md","articles":[]},"previous":{"title":"Architecture","level":"3.1","depth":1,"path":"Architecture.md","ref":"Architecture.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Engines.md","mtime":"2019-10-23T06:00:12.198Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-10-23T06:08:37.243Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
