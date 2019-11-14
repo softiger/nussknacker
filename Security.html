@@ -377,8 +377,9 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="security">Security</h1>
-<p>Nussnkacker has pluggable security architecture. You can either use default authentication provider, based
-on Basic authentication and static user configuration or integrate with other authentication mechanisms such as corporate SSO.</p>
+<p>Nussknacker has pluggable security architecture - by default we support two type of authentication: BasicAuth and OAuth2.
+You can either use default authentication provider, based on Basic authentication and static user configuration or integrate 
+with other authentication mechanisms such as custom SSO implementation.</p>
 <h2 id="users-and-permissions">Users and permissions</h2>
 <p>Each user has id and set of permissions for every process category. There are following permissions:</p>
 <ul>
@@ -393,8 +394,13 @@ This feature is designed to control access to components that have no category a
 <ul>
 <li>AdminTab - shows Admin tab in the UI (right now there are some useful things kept there including search components functionality).</li>
 </ul>
-<h2 id="default-security-module">Default security module</h2>
-<p>Default security provider uses users file in following format:</p>
+<h2 id="basicauth-security-module">BasicAuth security module</h2>
+<h4 id="configuration-in-following-format">Configuration in following format:</h4>
+<pre><code>authentication: {
+  method: &quot;BasicAuth&quot;
+  usersFile: &quot;conf/users.conf&quot;
+}
+</code></pre><h4 id="users-file-in-following-format">Users file in following format:</h4>
 <pre><code>users: [
   {
     id: &quot;user1&quot;
@@ -413,14 +419,64 @@ This feature is designed to control access to components that have no category a
     }
   }
 ]
-</code></pre><p>You can store passwords as plaintext or (preferably) encrypted using bcrypt. To compute encrypted passiowrd you can use following python script:</p>
-<pre><code class="lang-python"><span class="hljs-keyword">import</span> bcrypt
-print(bcrypt.hashpw(<span class="hljs-string">&quot;password_to_encode&quot;</span>.encode(<span class="hljs-string">&quot;utf8&quot;</span>), bcrypt.gensalt(rounds = <span class="hljs-number">12</span>, prefix = <span class="hljs-string">&quot;2a&quot;</span>)))
-</code></pre>
-<h2 id="implementing-own-security-provider">Implementing own security provider</h2>
+</code></pre><h2 id="oauth2-security-module">OAuth2 security module</h2>
+<h4 id="configuration-in-following-format">Configuration in following format:</h4>
+<pre><code>authentication: {
+  method: &quot;OAuth2&quot;
+  clientSecret: &quot;&quot;
+  clientId: &quot;&quot;
+  authorizeUri: &quot;https://github.com/login/oauth/authorize&quot;
+  redirectUri: &quot;http://localhost:3000&quot;
+  accessTokenUri: &quot;https://github.com/login/oauth/access_token&quot;
+  profileUri: &quot;https://api.github.com/user&quot;
+  accessTokenParams: {
+    grant_type: &quot;authorization_code&quot;
+  }
+  headers: {
+    Accept: &quot;application/json&quot;
+  }
+  authorizeParams: {
+    response_type: &quot;code&quot;
+  }
+
+  usersFile: &quot;./develConf/tests/oauth2-users.conf&quot;
+}
+</code></pre><h4 id="users-file-in-following-format">Users file in following format:</h4>
+<pre><code>users: [ //Special settings by user email
+  {
+    email: &quot;some@email.com&quot;
+    roles: [&quot;Admin&quot;]
+  }
+]
+
+rules: [
+  {
+    role: &quot;Admin&quot;
+    isAdmin: true
+    permissions: [&quot;Read&quot;, &quot;Write&quot;, &quot;Deploy&quot;]
+    globalPermissions: [&quot;AdminTab&quot;]
+    categories: [&quot;Defautl&quot;, &quot;FraudDetection&quot;, &quot;Recommendations&quot;]
+  },
+  {
+    role: &quot;User&quot; //this is default role for all users
+    permissions: [&quot;Read&quot;, &quot;Write&quot;, &quot;Deploy&quot;]
+    categories: [&quot;Defautl&quot;, &quot;FraudDetection&quot;]
+  }
+]
+</code></pre><h4 id="implementation-own-oauth2servicefactory">Implementation own OAuth2ServiceFactory</h4>
+<p>OAuth2 backend allows to exchange engine to fetching / parsing data from your OAuth2 Authentication Server and Profile Resource. 
+By default we support Github data format. To do this, simply replace the OAuth2ServiceFactory by your own implementation. 
+After that you have to register your implementation using Java&apos;s ServiceLoader mechanism by prepare <code>META-INFO/service</code> 
+resource for <code>pl.touk.nussknacker.ui.security.oauth2.OAuth2ServiceFactory</code>. You can find an example at tests in 
+<code>ExampleOAuth2ServiceFactory</code> file.</p>
+<pre><code>You can store passwords as plaintext or (preferably) encrypted using bcrypt. To compute encrypted passiowrd you can use following python script:
+```python
+import bcrypt
+print(bcrypt.hashpw(&quot;password_to_encode&quot;.encode(&quot;utf8&quot;), bcrypt.gensalt(rounds = 12, prefix = &quot;2a&quot;)))
+</code></pre><h2 id="implementing-own-security-provider">Implementing own security provider</h2>
 <p>In order to implement authentication provider you have to implement trait: </p>
 <pre><code class="lang-java">trait AuthenticatorFactory {
-  <span class="hljs-function">def <span class="hljs-title">createAuthenticator</span><span class="hljs-params">(config: Config)</span>: AuthenticationDirective[LoggedUser]
+  <span class="hljs-function">def <span class="hljs-title">createAuthenticator</span><span class="hljs-params">(config: Config, classLoader: ClassLoader)</span>: AuthenticationDirective[LoggedUser]
 }
 </span></code></pre>
 <p>It is based on <code>AuthenticationDirective</code> of Akka Http. Implementation must be put on Nussknacker classpath (Note: <strong>not</strong> in jar with <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, includes data structures, and nodes definitions.  ">model</a>)
@@ -470,7 +526,7 @@ Please note that there can be <strong>only</strong> one implementation on the cl
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Security","level":"2.5","depth":1,"next":{"title":"Architecture","level":"3.1","depth":1,"path":"Architecture.md","ref":"Architecture.md","articles":[]},"previous":{"title":"Configuration","level":"2.4","depth":1,"path":"Configuration.md","ref":"Configuration.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Security.md","mtime":"2019-11-07T12:18:11.402Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-07T12:31:01.524Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Security","level":"2.5","depth":1,"next":{"title":"Architecture","level":"3.1","depth":1,"path":"Architecture.md","ref":"Architecture.md","articles":[]},"previous":{"title":"Configuration","level":"2.4","depth":1,"path":"Configuration.md","ref":"Configuration.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Security.md","mtime":"2019-11-14T19:53:12.065Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-14T20:02:58.544Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
