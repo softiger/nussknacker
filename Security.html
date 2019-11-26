@@ -159,6 +159,38 @@
             
 
             
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.3.1" data-path="Subprocesses.html">
+            
+                <a href="Subprocesses.html">
+            
+                    
+                    Subprocesses
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3.2" data-path="customTransformers/FlinkCustomTransformers.html">
+            
+                <a href="customTransformers/FlinkCustomTransformers.html">
+            
+                    
+                    Flink custom transformers
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
         </li>
     
         <li class="chapter " data-level="2.4" data-path="Configuration.html">
@@ -403,20 +435,33 @@ This feature is designed to control access to components that have no category a
 </code></pre><h4 id="users-file-in-following-format">Users file in following format:</h4>
 <pre><code>users: [
   {
-    id: &quot;user1&quot;
-    password: &quot;pass&quot;
-    categoryPermissions: {
-      &quot;Category1&quot;: [&quot;Read&quot;, &quot;Deploy&quot;]
-      &quot;Category2&quot;: [&quot;Read&quot;, &quot;Write&quot;]
-    }
-    globalPermissions: [&quot;AdminTab&quot;]
+    identity: &quot;user1&quot;
+    password: &quot;pass&quot;,
+    roles: [&quot;Writer&quot;]
   },
   {
-    id: &quot;user2&quot;
+    identity: &quot;user2&quot;
     encrypedPassword: &quot;$2a$12$oA3U7DXkT5eFkyB8GbtKzuVqxUCU0zDmcueBYV218zO/JFQ9/bzY6&quot;
-    categoryPermissions: {
-      &quot;Category1&quot;: [&quot;Read&quot;, &quot;Deploy&quot;]
-    }
+    permissions: [&quot;Deployer&quot;]
+  }
+]
+
+rules: [
+  {
+    role: &quot;Reader&quot;
+    permissions: [&quot;Read&quot;]
+    categories: [&quot;Category1&quot;, &quot;Category2&quot;]
+  },
+  {
+    role: &quot;Writer&quot;
+    permissions: [&quot;Read&quot;, &quot;Write&quot;]
+    categories: [&quot;Category1&quot;, &quot;Category2&quot;]
+  },
+  {
+    role: &quot;Deployer&quot;
+    permissions: [&quot;Read&quot;, &quot;Write&quot;, &quot;Deploy&quot;]
+    globalPermissions: [&quot;AdminTab&quot;]
+    categories: [&quot;Category1&quot;, &quot;Category2&quot;]
   }
 ]
 </code></pre><h2 id="oauth2-security-module">OAuth2 security module</h2>
@@ -444,7 +489,7 @@ This feature is designed to control access to components that have no category a
 </code></pre><h4 id="users-file-in-following-format">Users file in following format:</h4>
 <pre><code>users: [ //Special settings by user email
   {
-    email: &quot;some@email.com&quot;
+    identity: &quot;some@email.com&quot;
     roles: [&quot;Admin&quot;]
   }
 ]
@@ -453,9 +498,6 @@ rules: [
   {
     role: &quot;Admin&quot;
     isAdmin: true
-    permissions: [&quot;Read&quot;, &quot;Write&quot;, &quot;Deploy&quot;]
-    globalPermissions: [&quot;AdminTab&quot;]
-    categories: [&quot;Defautl&quot;, &quot;FraudDetection&quot;, &quot;Recommendations&quot;]
   },
   {
     role: &quot;User&quot; //this is default role for all users
@@ -526,7 +568,7 @@ Please note that there can be <strong>only</strong> one implementation on the cl
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Security","level":"2.5","depth":1,"next":{"title":"Architecture","level":"3.1","depth":1,"path":"Architecture.md","ref":"Architecture.md","articles":[]},"previous":{"title":"Configuration","level":"2.4","depth":1,"path":"Configuration.md","ref":"Configuration.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.3","flinkMajorVersion":"1.3"},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Security.md","mtime":"2019-11-14T19:53:12.065Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-14T20:02:58.544Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Security","level":"2.5","depth":1,"next":{"title":"Architecture","level":"3.1","depth":1,"path":"Architecture.md","ref":"Architecture.md","articles":[]},"previous":{"title":"Configuration","level":"2.4","depth":1,"path":"Configuration.md","ref":"Configuration.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.11","flinkMajorVersion":"1.7"},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Security.md","mtime":"2019-11-26T11:53:31.772Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-26T12:06:16.590Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

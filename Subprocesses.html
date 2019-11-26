@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Why Nussknacker · GitBook</title>
+        <title>Subprocesses · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="Quickstart.html" />
+    <link rel="next" href="customTransformers/FlinkCustomTransformers.html" />
     
     
-    <link rel="prev" href="./" />
+    <link rel="prev" href="DesigningProcesses.html" />
     
 
     </head>
@@ -102,7 +102,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.2" data-path="Why.html">
+        <li class="chapter " data-level="1.2" data-path="Why.html">
             
                 <a href="Why.html">
             
@@ -162,7 +162,7 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="2.3.1" data-path="Subprocesses.html">
+        <li class="chapter active" data-level="2.3.1" data-path="Subprocesses.html">
             
                 <a href="Subprocesses.html">
             
@@ -393,7 +393,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >Why Nussknacker</a>
+        <a href="." >Subprocesses</a>
     </h1>
 </div>
 
@@ -408,27 +408,22 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="why-nussknacker">Why Nussknacker?</h1>
-<h2 id="make-power-of-apache-flink-accessible-to-business-users">Make power of Apache Flink accessible to business users</h2>
-<p>Real-time data processing quickly becomes one of the key ingredients of marketing, monitoring or fraud detection.
-The ability to ingest large amounts of data within (mili)seconds, to process them and draw actionable insights can become a real competitive advantage. </p>
-<p>One of the most advanced platforms for stream processing is Apache <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a>. It allows users to process millions of events per second and process them without losing even one. 
-<a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a> offers the unmatched richness of Scala/Java API for performing filtering, enrichment and sophisticated aggregations. </p>
-<p>However, many use cases involve processes that would be best defined or changed by not-so-technical users - analysts or business people. Furthermore, many companies do not have large enough development teams to be able to define all processes with code. </p>
-<p>This is where Nussknacker kicks in.</p>
-<h2 id="flow">Flow</h2>
-<p>We strongly believe that &apos;zero-code&apos; platforms are humbug. For each deployment, some development effort is needed to define <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, includes data structures, and nodes definitions.  ">model</a>, integrations with external systems and so on. </p>
-<p>This step includes development and produces jar with <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, includes data structures, and nodes definitions.  ">model</a> and defined services. Read 
-<a href="API.html">API</a> section to learn how to define <a href="GLOSSARY.html#model" class="glossary-term" title="Model describes your processes, includes data structures, and nodes definitions.  ">model</a> classes and provide integrations.</p>
-<p>Once those artifacts are defined and installed in Nussknacker, semi-technical users
-will be able to design specific processes using <a href="DesigningProcesses.html">GUI</a>. </p>
-<h2 id="applications">Applications</h2>
-<p>Real-time event processing is crucial in many area. Below are sample use cases:</p>
+                                <h1 id="subprocesses">Subprocesses</h1>
+<p>Subprocesses are a way to share fragments of logic. </p>
+<p>Subprocess first has to be designed (you can access subprocesses via Subprocesses tab) and then it can be used in other processes in same category</p>
+<h2 id="inputs">Inputs</h2>
+<p>Subprocess can have one input. You can define parameters of a subprocess:</p>
+<p><img src="img/subprocess_input.png" alt="subprocess input"></p>
+<p>Currently they have to be given as fully qualified Java type e.g. <code>java.lang.String</code>, <code>java.lang.Long</code></p>
+<h2 id="outputs">Outputs</h2>
+<p>Subprocess can define zero, one or more outputs. Each of them has a name, main process can then choose appropriate output. Below you can see subprocess with two outputs:</p>
+<p><img src="img/subprocess_output.png" alt="subprocess output"></p>
+<h2 id="limitations-of-subprocesses">Limitations of subprocesses</h2>
 <ul>
-<li>Real-time marketing</li>
-<li>Fraud prevention and detection</li>
-<li>Streaming ETL</li>
-<li>Traffic data</li>
+<li>They cannot access variables from the main process if they are not passed as parameters.</li>
+<li>They cannot be nested (i.e. subprocess cannot invoke other subprocess).</li>
+<li>They cannot pass output variables to the main process. This may change in the future.</li>
+<li>When inputs/outputs of subprocess change, processes using it have to be corrected manually.</li>
 </ul>
 
                                 
@@ -457,12 +452,12 @@ will be able to design specific processes using <a href="DesigningProcesses.html
 
             
                 
-                <a href="./" class="navigation navigation-prev " aria-label="Previous page: Introduction">
+                <a href="DesigningProcesses.html" class="navigation navigation-prev " aria-label="Previous page: Designing processes">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="Quickstart.html" class="navigation navigation-next " aria-label="Next page: Quickstart">
+                <a href="customTransformers/FlinkCustomTransformers.html" class="navigation navigation-next " aria-label="Next page: Flink custom transformers">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -473,7 +468,7 @@ will be able to design specific processes using <a href="DesigningProcesses.html
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Why Nussknacker","level":"1.2","depth":1,"next":{"title":"Quickstart","level":"2.1","depth":1,"path":"Quickstart.md","ref":"Quickstart.md","articles":[]},"previous":{"title":"Introduction","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.11","flinkMajorVersion":"1.7"},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Why.md","mtime":"2019-11-26T11:53:31.772Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-26T12:06:16.590Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Subprocesses","level":"2.3.1","depth":2,"next":{"title":"Flink custom transformers","level":"2.3.2","depth":2,"path":"customTransformers/FlinkCustomTransformers.md","ref":"customTransformers/FlinkCustomTransformers.md","articles":[]},"previous":{"title":"Designing processes","level":"2.3","depth":1,"path":"DesigningProcesses.md","ref":"DesigningProcesses.md","articles":[{"title":"Subprocesses","level":"2.3.1","depth":2,"path":"Subprocesses.md","ref":"Subprocesses.md","articles":[]},{"title":"Flink custom transformers","level":"2.3.2","depth":2,"path":"customTransformers/FlinkCustomTransformers.md","ref":"customTransformers/FlinkCustomTransformers.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.11","flinkMajorVersion":"1.7"},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Subprocesses.md","mtime":"2019-11-26T11:53:31.772Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-26T12:06:16.590Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
