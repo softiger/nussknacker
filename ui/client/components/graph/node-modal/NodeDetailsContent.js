@@ -25,6 +25,8 @@ import TestResults from "./tests/TestResults"
 import TestResultsSelect from "./tests/TestResultsSelect"
 import {EditorType} from "./editors/expression/Editor"
 
+const ReactMarkdown = require("react-markdown/with-html")
+
 //move state to redux?
 // here `componentDidUpdate` is complicated to clear unsaved changes in modal
 export class NodeDetailsContent extends React.Component {
@@ -352,7 +354,7 @@ export class NodeDetailsContent extends React.Component {
         )
       case "Properties":
         const type = this.props.node.typeSpecificProperties.type
-        const commonFields = this.subprocessVersionFields()
+        const commonFields = [] //this.subprocessVersionFields()
         //fixme move this configuration to some better place?
         const fields = type === "StreamMetaData" ? [
           this.createField(
@@ -738,6 +740,13 @@ export class NodeDetailsContent extends React.Component {
     return (
         <div className={nodeClass}>
           <NodeErrors errors={otherErrors} message={"Node has errors"} />
+          {
+            this.props.processCountsAdditionalInfo ? <ReactMarkdown
+              source={this.props.processCountsAdditionalInfo}
+              linkTarget="_blank"
+              escapeHtml={false}
+            />: null
+          }
           <TestResultsSelect
               results={this.props.testResults}
               resultsIdToShow={this.state.testResultsIdToShow}
@@ -751,11 +760,12 @@ export class NodeDetailsContent extends React.Component {
   }
 }
 
-function mapState(state) {
+function mapState(state, props) {
   return {
     additionalPropertiesConfig: _.get(state.settings, "processDefinitionData.additionalPropertiesConfig") || {},
     processDefinitionData: state.settings.processDefinitionData || {},
     processToDisplay: state.graphReducer.processToDisplay,
+    processCountsAdditionalInfo: _.get(state, `graphReducer.processCounts.${props.node.id}.additionalInfo`),
   }
 }
 
