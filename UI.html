@@ -7,7 +7,7 @@
         <title>UI Manual · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.3">
+        <meta name="generator" content="GitBook 3.2.2">
         
         
         
@@ -162,9 +162,22 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="2.3.1" data-path="Subprocesses.html">
+        <li class="chapter " data-level="2.3.1" data-path="designingProcesses/BasicNodes.html">
             
-                <a href="Subprocesses.html">
+                <a href="designingProcesses/BasicNodes.html">
+            
+                    
+                    Basic nodes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3.2" data-path="designingProcesses/Subprocesses.html">
+            
+                <a href="designingProcesses/Subprocesses.html">
             
                     
                     Subprocesses
@@ -175,9 +188,9 @@
             
         </li>
     
-        <li class="chapter " data-level="2.3.2" data-path="customTransformers/FlinkCustomTransformers.html">
+        <li class="chapter " data-level="2.3.3" data-path="designingProcesses/FlinkCustomTransformers.html">
             
-                <a href="customTransformers/FlinkCustomTransformers.html">
+                <a href="designingProcesses/FlinkCustomTransformers.html">
             
                     
                     Flink custom transformers
@@ -416,8 +429,8 @@
 <li>list of editable and custom non-editable processes</li>
 <li>search </li>
 <li>filter by category</li>
-<li>process status indication - if it&apos;s running processes have green status indicator, 
-if process crashed there will be red status indicator</li>
+<li>information about author and creation / modification dates</li>
+<li>process status indication</li>
 <li>edit action</li>
 <li>link to process&apos; metric dashboard </li>
 </ul>
@@ -426,19 +439,20 @@ if process crashed there will be red status indicator</li>
 <li>list of editable and custom non-editable subprocesses</li>
 <li>search </li>
 <li>filter by category</li>
+<li>information about author and creation / modification dates</li>
 <li>edit action</li>
 </ul>
 <h1 id="process-editing">Process editing</h1>
 <h2 id="left-panel">Left panel</h2>
 <ul>
-<li>creator panel - with all nodes available for chosen process category. Just drag &amp; drop it to create process </li>
+<li>creator panel - with all nodes available for chosen process category </li>
 <li>versions - every saved version of process is persisted</li>
 <li>comments</li>
 <li>attachments</li>
 </ul>
 <h2 id="right-panel">Right panel</h2>
 <ul>
-<li>business view - enable to view simpler version of process without variable and enricher nodes</li>
+<li>business view - enable simpler version of process without variable and enricher nodes</li>
 </ul>
 <h3 id="deployment">Deployment</h3>
 <ul>
@@ -454,16 +468,15 @@ if process crashed there will be red status indicator</li>
 <li>import - import process from json file</li>
 <li>JSON - export process to json file</li>
 <li>PDF - export process graph to PDF with all process details</li>
-<li>zoomIn/zoomOut</li>
-<li>archive</li>
+<li>archive - move the process to the archive</li>
 </ul>
 <h3 id="edit">Edit</h3>
 <ul>
 <li>undo/redo - undo/redo graph process actions</li>
-<li>align - automatically layout the process</li>
+<li>layout - automatically layout the process</li>
 <li>properties - edit properties of the process</li>
 <li>duplicate - duplicate node </li>
-<li>copy/cut/delete/paste - editing operations, they can work on sets of nodes</li>
+<li>copy/cut/delete/paste - editing operations, they can work on sets of nodes, nodes can be copied between processes</li>
 </ul>
 <h3 id="test">Test</h3>
 <ul>
@@ -522,7 +535,7 @@ if process crashed there will be red status indicator</li>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"UI Manual","level":"2.2","depth":1,"next":{"title":"Designing processes","level":"2.3","depth":1,"path":"DesigningProcesses.md","ref":"DesigningProcesses.md","articles":[{"title":"Subprocesses","level":"2.3.1","depth":2,"path":"Subprocesses.md","ref":"Subprocesses.md","articles":[]},{"title":"Flink custom transformers","level":"2.3.2","depth":2,"path":"customTransformers/FlinkCustomTransformers.md","ref":"customTransformers/FlinkCustomTransformers.md","articles":[]}]},"previous":{"title":"Quickstart","level":"2.1","depth":1,"path":"Quickstart.md","ref":"Quickstart.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.11","flinkMajorVersion":"1.7"},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"UI.md","mtime":"2020-01-23T15:01:49.751Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-01-23T15:18:38.274Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"UI Manual","level":"2.2","depth":1,"next":{"title":"Designing processes","level":"2.3","depth":1,"path":"DesigningProcesses.md","ref":"DesigningProcesses.md","articles":[{"title":"Basic nodes","level":"2.3.1","depth":2,"path":"designingProcesses/BasicNodes.md","ref":"designingProcesses/BasicNodes.md","articles":[]},{"title":"Subprocesses","level":"2.3.2","depth":2,"path":"designingProcesses/Subprocesses.md","ref":"designingProcesses/Subprocesses.md","articles":[]},{"title":"Flink custom transformers","level":"2.3.3","depth":2,"path":"designingProcesses/FlinkCustomTransformers.md","ref":"designingProcesses/FlinkCustomTransformers.md","articles":[]}]},"previous":{"title":"Quickstart","level":"2.1","depth":1,"path":"Quickstart.md","ref":"Quickstart.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.11","flinkMajorVersion":"1.7"},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"UI.md","mtime":"2020-01-28T13:57:00.231Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2020-01-28T15:12:11.640Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
