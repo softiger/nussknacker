@@ -119,7 +119,9 @@ export class NodeDetailsContent extends React.Component {
   }
 
   fetchAdditionalData() {
-    HttpService.getNodeData(this.props.processToDisplay.id, this.state.editedNode).then(res => this.setState(() => ({additionalData: res.data})))
+    if (this.state.editedNode.type) {
+      HttpService.getNodeData(this.props.processToDisplay.id, this.state.editedNode).then(res => this.setState(() => ({additionalData: res.data})))
+    }
   }
 
   findParamByName(paramName) {
