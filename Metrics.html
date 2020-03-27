@@ -363,7 +363,20 @@
             
         </li>
     
-        <li class="chapter " data-level="4.7" data-path="GLOSSARY.html">
+        <li class="chapter " data-level="4.7" data-path="MigrationGuide.html">
+            
+                <a href="MigrationGuide.html">
+            
+                    
+                    Migration guide
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.8" data-path="GLOSSARY.html">
             
                 <a href="GLOSSARY.html">
             
@@ -431,6 +444,148 @@
 <li>http services&apos; invocation times, errors and throughput</li>
 <li>event processing delays</li>
 </ul>
+<h1 id="metrics-technical-details">Metrics technical details</h1>
+<p>We recommend using InfluxDB or Prometheus for storing metrics. In default (e.g. demo) setup we use InfluxDB.</p>
+<h2 id="metric-types">Metric types</h2>
+<p>We use following standard metric types, which are reported according to configured metric reporter</p>
+<ul>
+<li>gauge</li>
+<li>histogram</li>
+<li>counter</li>
+<li>meter</li>
+</ul>
+<p>In descriptions below we also use composite metrics, which translate to more than one <a href="GLOSSARY.html#flink" class="glossary-term" title="Apache Flink&#xAE; is an open-source stream processing framework for distributed, high-performing, always-available, and accurate data streaming applications. See https://flink.apache.org/">Flink</a>/Dropwizard metrics:</p>
+<ul>
+<li><p>instantRate - gauge measuring instant rate (that is, without smoothing) TODO: add also &apos;normal&apos; meter for this metric</p>
+</li>
+<li><p>instantRateWithCount - as above plus counter. TODO: after adding meter to instantRate this will become obsolete</p>
+<ul>
+<li>instantRate</li>
+<li>count - counter</li>
+</ul>
+</li>
+<li><p>espTimer - this type of metrics is used to track times of invocations with rate (e.g. how long service invocation took)</p>
+<ul>
+<li>histogram </li>
+<li>instantRate - gauge  </li>
+</ul>
+</li>
+</ul>
+<h2 id="common-metrics">Common metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Measurement</th>
+<th>Additional tags</th>
+<th>Metric type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nodeCount</td>
+<td>nodeId</td>
+<td>counter</td>
+<td>used e.g. by count functionality</td>
+</tr>
+<tr>
+<td>error.instantRate</td>
+<td>-</td>
+<td>instantRate</td>
+<td></td>
+</tr>
+<tr>
+<td>error.instantRateByNode</td>
+<td>nodeId</td>
+<td>instantRate</td>
+<td>nodeId is <code>unknown</code> if we fail to detect exact place</td>
+</tr>
+<tr>
+<td>service.OK</td>
+<td>serviceName</td>
+<td>espTimer</td>
+<td>see below</td>
+</tr>
+<tr>
+<td>service.FAIL</td>
+<td>serviceName</td>
+<td>espTimer</td>
+<td>see below</td>
+</tr>
+</tbody>
+</table>
+<p><code>service</code> metric is not added automatically. It can be used via <code>GenericTimeMeasuringService</code>
+to measure arbitrary code returning <code>Future</code> - it will be classified as OK or FAIL if it&apos;s successful 
+or not.</p>
+<h2 id="metrics-in-streaming-flink-mode">Metrics in streaming (Flink mode)</h2>
+<table>
+<thead>
+<tr>
+<th>Measurement</th>
+<th>Additional tags</th>
+<th>Metric type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>source</td>
+<td>nodeId</td>
+<td>instantRateWithCount</td>
+<td></td>
+</tr>
+<tr>
+<td>eventtimedelay.histogram</td>
+<td>nodeId</td>
+<td>historgram</td>
+<td>only for sources with eventTime, measures delay from event time to system time</td>
+</tr>
+<tr>
+<td>eventtimedelay.minimalDelay</td>
+<td>nodeId</td>
+<td>gauge</td>
+<td>time from last event (eventTime) to system time</td>
+</tr>
+<tr>
+<td>end</td>
+<td>nodeId</td>
+<td>instantRateWithCount</td>
+<td>for sinks and end processors</td>
+</tr>
+<tr>
+<td>dead_end</td>
+<td>nodeId</td>
+<td>instantRateWithCount</td>
+<td>for event filtered out on filters, switches etc.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="metrics-in-standalone-mode">Metrics in standalone mode</h2>
+<p>In standalone mode we use Dropwizard metrics. However, due to low traffic in this project we consider
+using Micrometer in the future.</p>
+<table>
+<thead>
+<tr>
+<th>Measurement</th>
+<th>Additional tags</th>
+<th>Metric type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>invocation.success</td>
+<td>-</td>
+<td>espTimer</td>
+<td></td>
+</tr>
+<tr>
+<td>invocation.failure</td>
+<td>nodeId</td>
+<td>espTimer</td>
+</tr>
+</tbody>
+</table>
 
                                 
                                 </section>
@@ -474,7 +629,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Monitoring","level":"4.1","depth":1,"next":{"title":"How to install","level":"4.2","depth":1,"path":"Install.md","ref":"Install.md","articles":[]},"previous":{"title":"API","level":"3.3","depth":1,"path":"API.md","ref":"API.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.11","flinkMajorVersion":"1.7"},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Metrics.md","mtime":"2020-03-12T09:51:01.720Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-03-12T10:07:24.610Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Monitoring","level":"4.1","depth":1,"next":{"title":"How to install","level":"4.2","depth":1,"path":"Install.md","ref":"Install.md","articles":[]},"previous":{"title":"API","level":"3.3","depth":1,"path":"API.md","ref":"API.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"nussknackerVersion":"0.0.11","flinkMajorVersion":"1.9"},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Metrics.md","mtime":"2020-03-27T08:00:13.974Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-03-27T08:12:05.004Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
