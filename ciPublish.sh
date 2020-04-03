@@ -19,4 +19,4 @@ fi
 
 cd ui/client && npm ci && cd -
 #we *always* publish as crossbuild
-./sbtwrapper -DnexusPassword=$2 ${nexusUrlProperty} ${nexusUserProperty} "set version in ThisBuild := \"$espEngineToukVersion\"" +publish skip-tests
+./sbtwrapper -DnexusPassword=$2 ${nexusUrlProperty} ${nexusUserProperty} "set version in ThisBuild := \"$espEngineToukVersion\"" +publish
