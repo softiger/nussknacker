@@ -19,7 +19,7 @@ class FlinkBatchProcessManagerSpec extends FunSuite with Matchers with BatchDock
 
   private lazy val testOutputPath = testDir.resolve("testOutput")
 
-  ignore("deploy process in running flink") {
+  test("deploy process in running flink") {
     val processName = ProcessName("batchProcess")
     val version = ProcessVersion(versionId = 15, processName = processName, user = "user1", modelVersion = Some(13))
     val process = prepareProcess(processName)

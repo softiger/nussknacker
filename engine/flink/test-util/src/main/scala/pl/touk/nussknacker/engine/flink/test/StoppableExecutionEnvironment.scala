@@ -2,11 +2,11 @@ package pl.touk.nussknacker.engine.flink.test
 
 
 import com.typesafe.scalalogging.LazyLogging
-import org.apache.flink.api.common.{JobExecutionResult, JobID, JobStatus}
+import org.apache.flink.api.common.{JobExecutionResult, JobID}
 import org.apache.flink.configuration._
 import org.apache.flink.queryablestate.client.QueryableStateClient
 import org.apache.flink.runtime.execution.ExecutionState
-import org.apache.flink.runtime.jobgraph.JobGraph
+import org.apache.flink.runtime.jobgraph.{JobGraph, JobStatus}
 import org.apache.flink.runtime.minicluster.MiniCluster
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.graph.StreamGraph
@@ -47,6 +47,7 @@ abstract class StoppableExecutionEnvironment(userFlinkClusterConfig: Configurati
   private lazy val flinkMiniCluster: MiniClusterResource = {
     val resource = prepareMiniClusterResource(userFlinkClusterConfig)
     resource.before()
+    resource.getClusterClient.setDetached(true)
     resource
   }
 
@@ -113,9 +114,9 @@ abstract class StoppableExecutionEnvironment(userFlinkClusterConfig: Configurati
     jobGraph.getJobConfiguration.addAll(userFlinkClusterConfig)
 
     // Is passed classloader is ok?
-    val jobID = flinkMiniCluster.getClusterClient.submitJob(jobGraph).get()
+    val submissionResult = flinkMiniCluster.getClusterClient.submitJob(jobGraph, getClass.getClassLoader)
 
-    new JobExecutionResult(jobID, 0, new java.util.HashMap[String, OptionalFailure[AnyRef]]())
+    new JobExecutionResult(submissionResult.getJobID, 0, new java.util.HashMap[String, OptionalFailure[AnyRef]]())
   }
 
   def cancel(jobId: JobID): Unit = {
