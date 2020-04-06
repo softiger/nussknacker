@@ -58,7 +58,7 @@ object NkBaseTest extends App {
     .parallelism(1)
     .exceptionHandlerNoParams()
     .source("start", "source", "size" -> "50 * 1000000")
-    //.filter("f1", "#input.field2() % 1000000 == 0")
+    // .filter("f1", "#input.field2() % 1000000 == 0")
     .filter("f1", "#input.field2() % 1000000 == 0L")
     //.filter("filter", "{#input}.?[#this.field2 % 1000000 != 0].isEmpty()")
     .sink("end", "#input", "sink")
